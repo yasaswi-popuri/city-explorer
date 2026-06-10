@@ -30,8 +30,7 @@ function Register({ setIsLoggedIn, setToken }) {
       const data = await res.json();
       if (res.ok) {
         setSuccess('Account created successfully! Signing you in...');
-        
-        // Auto-login after successful registration
+      
         setTimeout(async () => {
           try {
             const loginRes = await fetch('http://localhost:3030/login', {

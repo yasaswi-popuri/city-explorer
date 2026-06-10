@@ -6,6 +6,7 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import History from './pages/History';
 import Profile from './pages/Profile';
+import { NotificationProvider } from './context/NotificationContext';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -49,30 +50,32 @@ function App() {
   }, []);
 
   return (
-    <div className="App">
-      {/* Animated Particles Background */}
-      <div className="particles">
-        <div className="particle"></div>
-        <div className="particle"></div>
-        <div className="particle"></div>
-        <div className="particle"></div>
-        <div className="particle"></div>
-        <div className="particle"></div>
-        <div className="particle"></div>
+    <NotificationProvider>
+      <div className="App">
+        {/* Animated Particles Background */}
+        <div className="particles">
+          <div className="particle"></div>
+          <div className="particle"></div>
+          <div className="particle"></div>
+          <div className="particle"></div>
+          <div className="particle"></div>
+          <div className="particle"></div>
+          <div className="particle"></div>
+        </div>
+        
+        <Router>
+          <Navbar isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} setToken={setToken} />
+          <Routes>
+            <Route path="/" element={<SearchBar isLoggedIn={isLoggedIn} token={token} setToken={setToken} setIsLoggedIn={setIsLoggedIn} />} />
+            <Route path="/login" element={<Login setIsLoggedIn={setIsLoggedIn} setToken={setToken} />} />
+            <Route path="/register" element={<Register setIsLoggedIn={setIsLoggedIn} setToken={setToken} />} />
+            <Route path="/history" element={<History isLoggedIn={isLoggedIn} token={token} />} />
+            <Route path="/profile" element={<Profile token={token} />} />
+            <Route path="/search/:city" element={<h2>City Search Results Page</h2>} />
+          </Routes>
+        </Router>
       </div>
-      
-      <Router>
-        <Navbar isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} setToken={setToken} />
-        <Routes>
-          <Route path="/" element={<SearchBar isLoggedIn={isLoggedIn} token={token} setToken={setToken} setIsLoggedIn={setIsLoggedIn} />} />
-          <Route path="/login" element={<Login setIsLoggedIn={setIsLoggedIn} setToken={setToken} />} />
-          <Route path="/register" element={<Register setIsLoggedIn={setIsLoggedIn} setToken={setToken} />} />
-          <Route path="/history" element={<History isLoggedIn={isLoggedIn} token={token} />} />
-          <Route path="/profile" element={<Profile token={token} />} />
-          <Route path="/search/:city" element={<h2>City Search Results Page</h2>} />
-        </Routes>
-      </Router>
-    </div>
+    </NotificationProvider>
   );
 }
 

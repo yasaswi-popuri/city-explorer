@@ -322,6 +322,41 @@ app.get('/user/history', authenticateToken, async (req, res) => {
   }
 });
 
+// Climate prediction route
+app.get('/climate/predict', async (req, res) => {
+  try {
+    const city = req.query.city || '';
+    console.log('Fetching climate prediction from ML API...', city ? `for city: ${city}` : '');
+    
+    const mlUrl = city 
+      ? `http://127.0.0.1:5000/predict?city=${encodeURIComponent(city)}`
+      : 'http://127.0.0.1:5000/predict';
+    
+    const response = await axios.get(mlUrl);
+    
+    console.log('Climate prediction received:', response.data);
+    
+    res.json({
+      success: true,
+      data: response.data
+    });
+  } catch (err) {
+    console.error('Climate prediction error:', err.message);
+    
+    if (err.code === 'ECONNREFUSED') {
+      res.status(503).json({ 
+        success: false, 
+        message: 'Climate prediction service is currently unavailable. Please try again later.' 
+      });
+    } else {
+      res.status(500).json({ 
+        success: false, 
+        message: 'Failed to fetch climate prediction. Please try again later.' 
+      });
+    }
+  }
+});
+
 app.get('/', (req, res) => {
   res.send('Server started');
 });
